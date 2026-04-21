@@ -24,7 +24,7 @@ class MorseApp(QWidget):
         self.stop_event = threading.Event()
 
         self.setWindowTitle("Morse Code Converter")
-        self.setGeometry(800, 800, 800, 300)
+        self.setGeometry(800, 300, 800, 300)
 
         layout = QVBoxLayout()
 
