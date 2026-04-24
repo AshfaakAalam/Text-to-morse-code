@@ -3,7 +3,7 @@ import numpy as np
 import sounddevice as sd
 from morse_code import MORSE
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QTextEdit, QLabel, QPushButton
-
+from PyQt5.QtCore import Qt
 import threading
 
 
@@ -15,8 +15,57 @@ def generate_tone(freq=800, duration=0.2, sample_rate=44100):
 
 class MorseApp(QWidget):
 
+
     def __init__(self):
         super().__init__()
+        self.setStyleSheet("""
+            QWidget {
+                background-color: #121212;
+                color: #E0E0E0;
+                font-family: Segoe UI, Arial;
+                font-size: 14px;
+            }
+
+            QTextEdit {
+                background-color: #1E1E1E;
+                border: 2px solid #333;
+                border-radius: 10px;
+                padding: 10px;
+                font-size: 15px;
+            }
+
+            QLabel {
+                font-size: 16px;
+            }
+
+            QPushButton {
+                background-color: #4CAF50;
+                border: none;
+                border-radius: 10px;
+                padding: 10px;
+                font-weight: bold;
+            }
+
+            QPushButton:hover {
+                background-color: #45A049;
+            }
+
+            QPushButton:pressed {
+                background-color: #3e8e41;
+            }
+
+            QPushButton:disabled {
+                background-color: #555;
+                color: #999;
+            }
+        """)
+        self.title_label = QLabel("🔊 Morse Code Converter")
+        self.title_label.setStyleSheet("""
+            font-size: 24px;
+            font-weight: bold;
+            color: #00FFCC;
+        """)
+        self.title_label.setAlignment(Qt.AlignCenter)
 
         self.UNIT = 0.5
 
@@ -27,6 +76,9 @@ class MorseApp(QWidget):
         self.setGeometry(800, 300, 800, 300)
 
         layout = QVBoxLayout()
+        layout.setSpacing(15)
+        layout.setContentsMargins(20, 20, 20, 20)
+        layout.addWidget(self.title_label)
 
         self.input_box = QTextEdit()
         self.input_box.setPlaceholderText("Enter your text here...")
@@ -34,7 +86,15 @@ class MorseApp(QWidget):
 
         self.output_label = QLabel("Morse Output:")
         self.output_display = QLabel("")
-        self.output_display.setStyleSheet("font-size: 18px;")
+
+        self.output_display.setStyleSheet("""
+            background-color: #1E1E1E;
+            border-radius: 10px;                            # Makes cards for output
+            padding: 15px;
+            font-size: 18px;
+            border: 1px solid #333;
+        """)
+
         self.output_display.setWordWrap(True)
 
         self.play_button = QPushButton("▶ Play Morse Sound")
@@ -43,6 +103,22 @@ class MorseApp(QWidget):
         self.stop_button = QPushButton("■ Stop")
         self.stop_button.clicked.connect(self.stop_playback)
         self.stop_button.setEnabled(False)
+
+        self.play_button.setStyleSheet("""
+            background-color: #2196F3;
+            color: white;
+            border-radius: 10px;
+            padding: 10px;
+            font-weight: bold;
+        """)
+
+        self.stop_button.setStyleSheet("""
+            background-color: #f44336;
+            color: white;
+            border-radius: 10px;
+            padding: 10px;
+            font-weight: bold;
+        """)
 
         layout.addWidget(self.input_box)
         layout.addWidget(self.output_label)
